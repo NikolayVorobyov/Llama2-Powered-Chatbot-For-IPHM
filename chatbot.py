@@ -10,13 +10,15 @@ from langchain.chains import RetrievalQA
 def load_llm():
     llm = CTransformers(model='models/llama-2-7b-chat.ggmlv3.q2_K.bin', # model available here: https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
                     model_type='llama',
+                    context_length=4096, # ???
                     config={'max_new_tokens': 256, 'temperature': 0})
     return llm
 
 def load_vector_store():
     # load the interpreted information from the local database
     embeddings = HuggingFaceEmbeddings(
-        model_name="sentence-transformers/all-MiniLM-L6-v2",
+#        model_name="sentence-transformers/all-MiniLM-L6-v2",
+        model_name="sentence-transformers/all-mpnet-base-v2",
         model_kwargs={'device': 'cpu'})
     db = FAISS.load_local("faiss", embeddings)
     return db

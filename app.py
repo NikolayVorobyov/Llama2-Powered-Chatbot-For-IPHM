@@ -1,6 +1,7 @@
 import streamlit as st
 from streamlit_chat import message
 from langchain.llms import CTransformers
+from langchain.llms import Ollama
 from langchain import PromptTemplate
 from langchain.chains import RetrievalQA
 from langchain.embeddings import HuggingFaceEmbeddings
@@ -11,17 +12,22 @@ from PyPDF2 import PdfReader
 from glob import glob
 import pickle
 
-
+from PIL import Image
 st.set_page_config(page_title='Llama2-Chatbot')
-st.header('Custom Llama2-Powered Chatbot :robot_face:')
+image = Image.open("IPHost.png")
+st.image(image, width=64)
+st.header('IP Host Monitor Llama2-Powered Chatbot')
 
 @st.cache_resource()
 def load_llm():
 
     # load the llm with ctransformers
-    llm = CTransformers(model='models/llama-2-7b-chat.ggmlv3.q2_K.bin', # model available here: https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
-                    model_type='llama',
-                    config={'max_new_tokens': 256, 'temperature': 0})
+    #llm = CTransformers(model='models/llama-2-7b-chat.ggmlv3.q2_K.bin', # model available here: https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
+    #                model_type='llama',
+    #                context_length=4096,
+    #                config={'max_new_tokens': 256, 'temperature': 0})
+    llm = Ollama(model="llama2:13b", num_thread=6) # Use 6 CPU cores
+    #llm = Ollama(model="llama2:13b") # Use 50% of CPU cores
     return llm
 
 @st.cache_resource()
@@ -29,7 +35,9 @@ def load_vector_store():
 
     # load the vector store
     embeddings = HuggingFaceEmbeddings(
+        #model_name="sentence-transformers/all-MiniLM-L12-v2",
         model_name="sentence-transformers/all-MiniLM-L6-v2",
+        #model_name="sentence-transformers/all-mpnet-base-v2",
         model_kwargs={'device': 'cpu'})
     db = FAISS.load_local("faiss", embeddings)
     return db
@@ -78,7 +86,7 @@ def generate_response(query, qa_chain):
 def get_user_input():
 
     # get the user query
-    input_text = st.text_input('Ask me anything about the use of computer vision in sports!', "", key='input')
+    input_text = st.text_input('Ask me anything about the use of IP Host monitor software', "", key='input')
     return input_text
 
 

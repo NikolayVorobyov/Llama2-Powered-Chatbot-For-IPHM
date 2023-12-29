@@ -10,7 +10,7 @@ The resulting application will be evaluated based on it's ability as a tool of c
 ## Installation Instructions
 
 1. Clone this repository using the command:  
-```git clone https://github.com/anair123/Llama2-Powered-QA-Chatbot-For-Research-Papers.git```
+```git clone https://github.com/NikolayVorobyov/Llama2-Powered-Chatbot-For-IPHM```
 
 2. Download a quantized Llama2 model (pick any one) from the following link:     https://huggingface.co/TheBloke/Llama-2-7B-Chat-GGML/tree/main
 
@@ -18,21 +18,19 @@ The resulting application will be evaluated based on it's ability as a tool of c
 
 4. Create a virtual environment and enter it  
 ```python -m venv <name_of_venv>```  
-```venv/Scripts/Activate```
+```source <name_of_venv>/bin/activate```
 
-5. Install the dependencies with the command:  
+5. Install the dependencies with the command:
 ```pip install -r requirements.txt```
 
-6. Add all the pdf documents you want to interact with in the "data" folder.
+6. Install the dependencies to download and parse the Web site:
+```sudo apt-get install httrack```
+```pip install lxml beautifulsoup4```
 
-7. Run the Streamlit web app with the command:  
+7. Download HTML files from https://iphostmonitor.com site in the "data" folder using collect_data.sh script.
+
+8. Create vector store from HTML files (will be saved into faiss folder):
+```python3 create_vector_store.py```
+
+9. Run the Streamlit web app with the command:  
 ```streamlit run app.py```
-
-
-
-## Author
-Aashish Nair  
-LinkedIn: www.linkedin.com/in/aashish-nair  
-Medium: https://medium.com/@aashishnair
-
-
